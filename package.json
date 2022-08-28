@@ -1,0 +1,39 @@
+{
+    "author": {
+        "email": "admin@victorsmirnov.blog",
+        "name": "Victor Smirnov",
+        "url": "https://victorsmirnov.blog"
+    },
+    "description": "Companion repository for the 'AWS CDK to deploy the static site on AWS S3 with CloudFront CDN' tutorial",
+    "name": "static-site-s3-cloudfront",
+    "version": "0.1.0",
+    "dependencies": {
+        "aws-cdk-lib": "^2.39.0",
+        "cdk": "^2.39.0",
+        "constructs": "^10.1.88",
+        "joi": "^17.6.0"
+    },
+    "devDependencies": {
+        "@types/joi": "^17.2.3",
+        "@types/node": "^18.7.13",
+        "husky": "^8.0.1",
+        "lint-staged": "^13.0.3",
+        "rimraf": "^3.0.2",
+        "snazzy": "^9.0.0",
+        "ts-standard": "^11.0.0",
+        "typescript": "^4.8.2"
+    },
+    "license": "ISC",
+    "repository": {
+        "url": "https://github.com/victorsmirnov/static-site-s3-cloudfront"
+    },
+    "scripts": {
+        "build": "tsc",
+        "cdk": "cdk",
+        "clean": "rimraf cdk.out dist",
+        "format": "ts-standard --fix --verbose | snazzy",
+        "prepare": "husky install",
+        "test": "ts-standard --verbose | snazzy"
+    },
+    "type": "module"
+}

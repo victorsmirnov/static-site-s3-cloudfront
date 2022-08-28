@@ -1,0 +1,7 @@
+{
+    "app": "node dist/main.js",
+    "build": "npm run build",
+    "context": {
+        "@aws-cdk/core:newStyleStackSynthesis": true
+    }
+}
