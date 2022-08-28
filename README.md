@@ -102,6 +102,8 @@ The deployment feels like bliss when we have the AWS credentials in place. Pleas
 We [retrieve temporary AWS credentials][10] for the given role. And then, we run the CDK deployment as we do on
 the local computer.
 
+![GitHub actions deploys the CDK application](docs/github-action-deploys-cdk-app.png)
+
 We now have an empty CDK project with CI we can use as a starting point in the future.
 Let's add static site resources to it.
 
