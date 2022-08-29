@@ -10,7 +10,8 @@
     "dependencies": {
         "aws-cdk-lib": "^2.39.0",
         "cdk": "^2.39.0",
-        "constructs": "^10.1.88",
+        "constructs": "^10.1.90",
+        "dotenv": "^16.0.2",
         "joi": "^17.6.0"
     },
     "devDependencies": {

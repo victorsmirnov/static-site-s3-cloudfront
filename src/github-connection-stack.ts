@@ -1,6 +1,6 @@
-import { Construct } from 'constructs'
 import { CfnOutput, Environment, Stack } from 'aws-cdk-lib'
 import { OpenIdConnectProvider } from 'aws-cdk-lib/aws-iam'
+import { Construct } from 'constructs'
 
 export interface GithubConnectionStackProps {
   /**

@@ -6,14 +6,14 @@ export interface DeploymentRoleProps {
   readonly githubRepo: string
 }
 
-export function createDeploymentRole (scope: Construct, { account, githubRepo }: DeploymentRoleProps): Role {
+export function createDeploymentRole (scope: Construct, props: DeploymentRoleProps): Role {
   const provider = OpenIdConnectProvider.fromOpenIdConnectProviderArn(scope, 'GitHubProvider',
-    `arn:aws:iam::${account}:oidc-provider/token.actions.githubusercontent.com`)
+    `arn:aws:iam::${props.account}:oidc-provider/token.actions.githubusercontent.com`)
 
   const role = new Role(scope, 'SiteDeploymentRole', {
     assumedBy: new OpenIdConnectPrincipal(provider)
       .withConditions({
-        StringLike: { 'token.actions.githubusercontent.com:sub': `repo:${githubRepo}:*` }
+        StringLike: { 'token.actions.githubusercontent.com:sub': `repo:${props.githubRepo}:*` }
       }),
     roleName: 'SiteDeploymentRole'
   })
