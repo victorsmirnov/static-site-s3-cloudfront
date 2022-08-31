@@ -30,4 +30,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy site stack
+        env:
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+          SITE_NAME: ${{ secrets.SITE_NAME }}
         run: npx cdk deploy --require-approval never SiteStack

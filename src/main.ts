@@ -44,6 +44,7 @@ function validateEnvironment (): void {
 
   const validationRes = envSchema.validate(env)
   if (validationRes.error != null) {
-    throw validationRes.error
+    throw new Error('Missing environment variables: ' +
+      validationRes.error.details.map((d) => d.message).join(', '))
   }
 }
