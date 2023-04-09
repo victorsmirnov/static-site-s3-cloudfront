@@ -2,18 +2,17 @@ import { ManagedPolicy, OpenIdConnectPrincipal, OpenIdConnectProvider, Role } fr
 import { Construct } from 'constructs'
 
 export interface DeploymentRoleProps {
-  readonly account: string
   readonly githubRepo: string
+  readonly provider: OpenIdConnectProvider
 }
 
 export function createDeploymentRole (scope: Construct, props: DeploymentRoleProps): Role {
-  const provider = OpenIdConnectProvider.fromOpenIdConnectProviderArn(scope, 'GitHubProvider',
-    `arn:aws:iam::${props.account}:oidc-provider/token.actions.githubusercontent.com`)
+  const { githubRepo, provider } = props
 
   const role = new Role(scope, 'SiteDeploymentRole', {
     assumedBy: new OpenIdConnectPrincipal(provider)
       .withConditions({
-        StringLike: { 'token.actions.githubusercontent.com:sub': `repo:${props.githubRepo}:*` }
+        StringLike: { 'token.actions.githubusercontent.com:sub': `repo:${githubRepo}:*` }
       }),
     roleName: 'SiteDeploymentRole'
   })

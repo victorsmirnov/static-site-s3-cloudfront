@@ -1,9 +1,9 @@
-import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager'
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager'
 import {
   AllowedMethods,
   CachePolicy,
   Distribution,
-  OriginAccessIdentity,
+  HttpVersion,
   OriginRequestPolicy,
   ViewerProtocolPolicy
 } from 'aws-cdk-lib/aws-cloudfront'
@@ -12,21 +12,19 @@ import { Bucket } from 'aws-cdk-lib/aws-s3'
 import { Construct } from 'constructs'
 
 export interface CloudFrontProps {
-  readonly accessIdentity: OriginAccessIdentity
-  readonly certificate: DnsValidatedCertificate
+  readonly certificate: Certificate
   readonly siteBucket: Bucket
   readonly siteName: string
 }
 
 export function createCloudFront (scope: Construct, props: CloudFrontProps): Distribution {
-  const bucketOrigin = new S3Origin(props.siteBucket, {
-    originAccessIdentity: props.accessIdentity,
-    originPath: '/public'
-  })
+  const { certificate, siteBucket, siteName } = props
+
+  const bucketOrigin = new S3Origin(siteBucket, { originPath: '/public' })
 
   return new Distribution(scope, 'Distribution', {
-    certificate: props.certificate,
-    comment: `${props.siteName} static site bucket`,
+    certificate,
+    comment: `${siteName} static site bucket`,
     defaultBehavior: {
       allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
       cachePolicy: CachePolicy.CACHING_OPTIMIZED,
@@ -35,6 +33,7 @@ export function createCloudFront (scope: Construct, props: CloudFrontProps): Dis
       viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
     },
     defaultRootObject: 'index.html',
-    domainNames: [props.siteName]
+    domainNames: [siteName],
+    httpVersion: HttpVersion.HTTP2_AND_3
   })
 }

@@ -1,7 +1,9 @@
 import { App } from 'aws-cdk-lib'
 import Joi from 'joi'
 import { env } from 'process'
-import { createSiteStack } from './site-stack.js'
+import { createSiteStack } from './site-stack/site-stack.js'
+import { createCertificateStack } from './certificate-stack/certificate-stack.js'
+import { createGithubConnectionStack } from './github-connection-stack/github-connection-stack.js'
 
 validateEnvironment()
 
@@ -14,21 +16,32 @@ const domainName = env.DOMAIN_NAME
 const siteName = env.SITE_NAME
 const githubRepo = env.GITHUB_REPOSITORY
 
+const app = new App()
+
 /**
  * Stack for the GitHub OpenID connection. We need only one connection for the account.
- * I would move it to another repository someday.
  */
-// createGithubConnectionStack(app, { env: stackEnv, stackName: 'github-connection' })
+const { provider } = createGithubConnectionStack(app, { stackName: 'github-connection' })
 
-const app = new App()
-createSiteStack(app, {
-  bucketName: siteName,
+const { certificate, certificateStack } = createCertificateStack(app, {
   domainName,
-  env: { account: env.CDK_DEFAULT_ACCOUNT, region: env.CDK_DEFAULT_REGION },
+  siteName,
+  stackName: 'certificate-' + siteName.split('.').join('-')
+})
+certificateStack.tags.setTag('project', 'static-site')
+certificateStack.tags.setTag('site', siteName)
+
+const siteStack = createSiteStack(app, {
+  bucketName: siteName,
+  certificate,
+  domainName,
   githubRepo,
+  provider,
   siteName,
   stackName: 'site-' + siteName.split('.').join('-')
 })
+siteStack.tags.setTag('project', 'static-site')
+siteStack.tags.setTag('site', siteName)
 
 /**
  * Validate environment variables.

@@ -15,9 +15,6 @@ We will implement infrastructure for the static website with the following featu
 * Use [AWS CDK][4] to define and deploy the infrastructure.
 * Automatically update the infrastructure and deploy the website with [GitHub actions][5].
 
-We guide you through the development process. Every Git commit adds a slight change to the application,
-and we use tags to show milestones.
-
 ## Prerequisites
 
 We deploy the website in the Amazon AWS public cloud. If you want to follow the tutorial,
@@ -30,28 +27,26 @@ Please find below a checklist with prerequisites to perform the tutorial.
 - [ ] Install NodeJs on your computer. I recommend the latest stable version (LTS), which is now 16.17.0.
 - [ ] Register DNS zone for website's domain in the [AWS Route 53][8].
 
-## Initial CDK application
-
-In the first noteworthy commit, we create a minimalistic CDK application. And it looks something like this.
+## CDK application layout
 
 ![Project layout](docs/initial-cdk-layout.png)
 
+* `.github` contains workflow to deploy the stack with GitHub actions.
 * `.husky` contains a GitHook definition to check code formatting on commit.
 * `cdk.out` is the folder where the CDK application keeps its generated code.
 * `dist` is the out directory for the TypeScript compiler, and the CDK application takes scripts from there.
 * `src/main.ts` is the entry point for the CDK application. Please keep in mind that we compile
   the TypeScript code first. Then we run the JavaScript code from the `dist` folder.
-* `src/site-stack.ts` holds our stack definition.
 * `cdk.json` tells the toolkit how to run the application. In our case, it instructs the toolkit to compile
   the application and run the JavaScript code.
 
-At the moment, we should be able to deploy our application.
+## Basic commands to work with the CDK application
 
 ![First deployment](docs/first-deployment.png)
 
 * `npm run build` compile TypeScript from the `src` folder to JavaScript in the `dist` folder.
 * `npx cdk diff` compare deployed stack with the current state.
-* `npx cdk deploy` deploy this stack to the default AWS account and region from the default profile.
+* `npx cdk deploy --all` deploy all three stack sto the default AWS account and region from the default profile.
 * `npm run clean` removes all compiled JavaScript code and generated CDK templates.
 * `npm run format` fixes source code formatting and checks the code for the coding standard.
 * `npm run test` does not do any test but only validates code formatting.
@@ -106,7 +101,6 @@ the local computer.
 
 We now have an empty CDK project with CI we can use as a starting point in the future.
 Let's add static site resources to it.
-
 
 [1]: https://victorsmirnov.blog/static-s3-site-cloudfront/
 [2]: https://aws.amazon.com/s3/

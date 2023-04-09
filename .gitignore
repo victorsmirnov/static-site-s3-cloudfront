@@ -1,3 +1,9 @@
 cdk.out
 dist
 node_modules
+
+.env
+
+# You might want to have the file in the repository in the real project.
+# However, my repository is public, so I don't want to expose my account ID.
+cdk.context.json
